@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Environment variables (never commit secrets/API keys)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Build output
+dist/
+build/
+frontend/dist/
+frontend/build/
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+.turbo/
+coverage/
