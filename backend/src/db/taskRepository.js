@@ -55,4 +55,39 @@ async function markSkipped(taskId) {
   return result.rows[0];
 }
 
-module.exports = { createTask, getTask, updateStatus, incrementAttempt, logHistory, markDeadLetter, markSkipped };
+async function getAgentByApiKey(apiKey) {
+  const result = await pool.query(`SELECT * FROM agents WHERE api_key = $1`, [apiKey]);
+  return result.rows[0];
+}
+
+async function listFailedTasks(agentId, limit = 20) {
+  const result = await pool.query(
+    `SELECT * FROM tasks 
+     WHERE agent_id = $1 AND status IN ('failed', 'retrying', 'escalated', 'dead_letter')
+     ORDER BY updated_at DESC LIMIT $2`,
+    [agentId, limit]
+  );
+  return result.rows;
+}
+
+async function getTaskHistory(taskId) {
+  const result = await pool.query(
+    `SELECT event, detail, created_at FROM task_history WHERE task_id = $1 ORDER BY created_at`,
+    [taskId]
+  );
+  return result.rows;
+}
+
+async function resetForRetry(taskId) {
+  const result = await pool.query(
+    `UPDATE tasks SET status = 'pending', attempt_count = 0, updated_at = now() WHERE id = $1 RETURNING *`,
+    [taskId]
+  );
+  return result.rows[0];
+}
+
+module.exports = { 
+  createTask, getTask, updateStatus, incrementAttempt, logHistory, 
+  markDeadLetter, markSkipped, getAgentByApiKey, listFailedTasks, 
+  getTaskHistory, resetForRetry 
+};
