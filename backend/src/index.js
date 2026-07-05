@@ -2,6 +2,7 @@ require('dotenv').config();
 const { pool } = require('./db');
 const { redis } = require('./queue/redisClient');
 
+
 async function main() {
   const dbResult = await pool.query('SELECT NOW()');
   console.log('[postgres] connected:', dbResult.rows[0].now);

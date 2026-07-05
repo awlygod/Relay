@@ -39,5 +39,20 @@ async function logHistory(taskId, event, detail = {}) {
     [taskId, event, detail]
   );
 }
+async function markDeadLetter(taskId) {
+  const result = await pool.query(
+    `UPDATE tasks SET status = 'dead_letter', updated_at = now() WHERE id = $1 RETURNING *`,
+    [taskId]
+  );
+  return result.rows[0];
+}
 
-module.exports = { createTask, getTask, updateStatus, incrementAttempt, logHistory };
+async function markSkipped(taskId) {
+  const result = await pool.query(
+    `UPDATE tasks SET status = 'skipped', updated_at = now() WHERE id = $1 RETURNING *`,
+    [taskId]
+  );
+  return result.rows[0];
+}
+
+module.exports = { createTask, getTask, updateStatus, incrementAttempt, logHistory, markDeadLetter, markSkipped };

@@ -2,14 +2,15 @@
 // Later this reads task.payload to know what to actually do.
 async function executeStep(task) {
   console.log(`[executor] running task ${task.id} (${task.type})`);
+  await new Promise((r) => setTimeout(r, 500));
 
-  // TEMP: randomly succeed/fail so we can test both paths
-  const willFail = Math.random() < 0.4;
-
-  await new Promise((r) => setTimeout(r, 500)); // fake latency
-
-  if (willFail) {
-    throw new Error('Simulated failure: downstream call timed out');
+  const rand = Math.random();
+  if (rand < 0.25) {
+    throw new Error('Connection timeout while calling downstream service');
+  } else if (rand < 0.4) {
+    throw new Error('Invalid payload: missing required field "url"');
+  } else if (rand < 0.5) {
+    throw new Error('401 Unauthorized: invalid API credentials');
   }
   return { ok: true, result: `processed ${task.type}` };
 }

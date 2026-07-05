@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   type TEXT NOT NULL,
   payload JSONB NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending',
-  -- pending | running | succeeded | failed | retrying | dead_letter
+  -- pending | running | succeeded | failed | retrying | dead_letter | skipped | escalated
   attempt_count INT NOT NULL DEFAULT 0,
   max_attempts INT NOT NULL DEFAULT 5,
   idempotency_key TEXT UNIQUE,

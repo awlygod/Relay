@@ -5,7 +5,7 @@ const { enqueueTask } = require('../queue/redisStreams');
 const { v4: uuidv4 } = require('uuid');
 
 async function main() {
-  // create a dummy agent if none exists
+  // dummy agent if none exists
   const agentRes = await pool.query(
     `INSERT INTO agents (name, api_key) VALUES ('test-agent', 'test-key-123')
      ON CONFLICT (api_key) DO UPDATE SET name = EXCLUDED.name
