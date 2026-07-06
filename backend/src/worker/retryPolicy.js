@@ -1,4 +1,4 @@
-// Exponential backoff: 2^attempt seconds, capped at 60s
+// exponential backoff: 2^attempt secs
 function getBackoffMs(attemptCount) {
   const seconds = Math.min(Math.pow(2, attemptCount), 60);
   return seconds * 1000;

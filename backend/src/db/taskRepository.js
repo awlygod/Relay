@@ -85,9 +85,15 @@ async function resetForRetry(taskId) {
   );
   return result.rows[0];
 }
-
+async function listAllTasks(agentId, limit = 30) {
+  const result = await pool.query(
+    `SELECT * FROM tasks WHERE agent_id = $1 ORDER BY updated_at DESC LIMIT $2`,
+    [agentId, limit]
+  );
+  return result.rows;
+}
 module.exports = { 
   createTask, getTask, updateStatus, incrementAttempt, logHistory, 
   markDeadLetter, markSkipped, getAgentByApiKey, listFailedTasks, 
-  getTaskHistory, resetForRetry 
+  getTaskHistory, resetForRetry,listAllTasks
 };

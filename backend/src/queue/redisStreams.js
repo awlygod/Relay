@@ -3,7 +3,7 @@ const { redis } = require('./redisClient');
 const STREAM_KEY = 'tasks:stream';
 const GROUP_NAME = 'task-workers';
 
-// Create the consumer group once 
+// create the consumer group once 
 async function ensureGroup() {
   try {
     await redis.xgroup('CREATE', STREAM_KEY, GROUP_NAME, '0', 'MKSTREAM');
@@ -17,13 +17,13 @@ async function ensureGroup() {
   }
 }
 
-// Push a task id onto the stream
+// push a task id onto the stream
 async function enqueueTask(taskId) {
   const id = await redis.xadd(STREAM_KEY, '*', 'taskId', taskId);
   return id;
 }
 
-// Read pending entries for a given consumer
+// read pending entries for a given consumer
 async function readTasks(consumerName, count = 5) {
   const res = await redis.xreadgroup(
     'GROUP', GROUP_NAME, consumerName,
@@ -40,7 +40,7 @@ async function readTasks(consumerName, count = 5) {
   }));
 }
 
-// Acknowledge a processed entry
+// acknowledge a processed entry
 async function ackTask(streamId) {
   await redis.xack(STREAM_KEY, GROUP_NAME, streamId);
 }

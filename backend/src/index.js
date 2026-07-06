@@ -5,8 +5,10 @@ const { apiKeyAuth } = require('./api/middleware/apiKeyAuth');
 const { apiRateLimit } = require('./api/middleware/rateLimit');
 const tasksRouter = require('./api/routes/tasks');
 const authRouter = require('./api/routes/auth');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(apiRateLimit);
 

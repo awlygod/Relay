@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createTask, getTask, getTaskHistory, listFailedTasks, resetForRetry } = require('../../db/taskRepository');
+const { createTask, getTask, getTaskHistory, listAllTasks, resetForRetry } = require('../../db/taskRepository');
 const { enqueueTask } = require('../../queue/redisStreams');
 const { v4: uuidv4 } = require('uuid');
 
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const tasks = await listFailedTasks(req.agent.id, req.query.limit || 20);
+  const tasks = await listAllTasks(req.agent.id, req.query.limit || 20);
   res.json(tasks);
 });
 

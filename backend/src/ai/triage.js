@@ -4,10 +4,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-/**
- * Given a failed task and its error, decide what to do next.
- * Returns: { decision: 'retry' | 'skip' | 'escalate', reasoning: string }
- */
+
 async function triageFailure(task, errorMessage) {
   const prompt = `You are a triage system for a task execution engine.
 A task has failed. Decide the best next action.
@@ -37,7 +34,7 @@ Guidance:
     return parsed;
   } catch (err) {
     console.error('[triage] Gemini call failed, defaulting to retry:', err.message);
-    // Fail safe: if triage itself breaks, don't block the retry pipeline
+    
     return { decision: 'retry', reasoning: 'Triage unavailable, defaulting to retry.' };
   }
 }
