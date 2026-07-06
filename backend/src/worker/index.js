@@ -17,7 +17,7 @@ async function processTask({ streamId, taskId }) {
     return;
   }
 
-  // Idempotency guard
+  // idempotency guard
   if (['succeeded', 'dead_letter'].includes(task.status)) {
     console.log(`[worker] task ${task.id} already ${task.status}, skipping`);
     await ackTask(streamId);
@@ -36,7 +36,7 @@ try {
     const updatedTask = await incrementAttempt(task.id);
     await logHistory(task.id, 'failed', { error: err.message, attempt: updatedTask.attempt_count });
 
-    // Ask Gemini what to do next
+    // ask Gemini what to do next
     const triage = await triageFailure(updatedTask, err.message);
     await logHistory(task.id, 'triaged', triage);
     console.log(`[triage] task ${task.id} → ${triage.decision}: ${triage.reasoning}`);
@@ -56,7 +56,7 @@ try {
       return;
     }
 
-    // decision === 'retry' — 
+    
     if (hasExceededMaxAttempts(updatedTask)) {
       await markDeadLetter(task.id);
       await logHistory(task.id, 'dead_letter', { reason: 'max attempts exceeded' });
