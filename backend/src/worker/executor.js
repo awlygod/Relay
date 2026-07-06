@@ -1,5 +1,4 @@
-// Simulates executing a task's "step". Day 2: just a fake HTTP-ish call.
-// Later this reads task.payload to know what to actually do.
+
 async function executeStep(task) {
   console.log(`[executor] running task ${task.id} (${task.type})`);
   await new Promise((r) => setTimeout(r, 500));

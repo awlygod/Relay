@@ -3,7 +3,7 @@ const { redis } = require('./redisClient');
 const STREAM_KEY = 'tasks:stream';
 const GROUP_NAME = 'task-workers';
 
-// Create the consumer group once (ignore error if it already exists)
+// Create the consumer group once 
 async function ensureGroup() {
   try {
     await redis.xgroup('CREATE', STREAM_KEY, GROUP_NAME, '0', 'MKSTREAM');

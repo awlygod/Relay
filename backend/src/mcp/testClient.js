@@ -19,7 +19,7 @@ const createTaskRequest = {
   params: {
     name: 'create_task',
     arguments: {
-      agentApiKey: 'test-key-123', // the dummy agent from Day 2's createTestTask.js
+      agentApiKey: 'test-key-123', 
       type: 'send_webhook',
       payload: { url: 'https://example.com' },
     },

@@ -17,7 +17,7 @@ async function processTask({ streamId, taskId }) {
     return;
   }
 
-  // Idempotency guard: skip if already terminal
+  // Idempotency guard
   if (['succeeded', 'dead_letter'].includes(task.status)) {
     console.log(`[worker] task ${task.id} already ${task.status}, skipping`);
     await ackTask(streamId);
@@ -56,7 +56,7 @@ try {
       return;
     }
 
-    // decision === 'retry' — same logic as Day 3
+    // decision === 'retry' — 
     if (hasExceededMaxAttempts(updatedTask)) {
       await markDeadLetter(task.id);
       await logHistory(task.id, 'dead_letter', { reason: 'max attempts exceeded' });
